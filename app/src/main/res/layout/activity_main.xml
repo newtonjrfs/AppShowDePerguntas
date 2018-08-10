@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#007fa9"
+    android:background="@color/corFundo"
     tools:context=".MainActivity">
 
     <TextView
@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@android:color/holo_blue_light"
+            android:background="@color/corBotao"
             android:text="RadioButton"
             android:textColor="@android:color/white" />
 
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_weight="1"
-            android:background="@android:color/holo_blue_light"
+            android:background="@color/corBotao"
             android:text="RadioButton"
             android:textColor="@android:color/white" />
 
@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_weight="1"
-            android:background="@android:color/holo_blue_light"
+            android:background="@color/corBotao"
             android:text="RadioButton"
             android:textColor="@android:color/white" />
     </RadioGroup>
@@ -83,7 +83,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@android:color/holo_blue_light"
+        android:background="@color/corBotao"
         android:drawableRight="@android:drawable/checkbox_on_background"
         android:padding="15dp"
         android:text="Prosseguir   "

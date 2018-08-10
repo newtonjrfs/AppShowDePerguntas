@@ -1,8 +1,11 @@
 package newton.com.appshowdeperguntas;
 
+import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -36,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar progresso;
 
     int rodada = 0 ;
+    int respostasCertas = 0;
+    int respostaEscolhida = 0 ;
 
     ArrayList<Questao> listaQuestoes;
 
@@ -63,7 +68,9 @@ public class MainActivity extends AppCompatActivity {
         confirmar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (respostaEscolhida == listaQuestoes.get(rodada).correta){
+                    respostasCertas ++;
+                }
                 clicaProxima();
 
             }
@@ -74,13 +81,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.opcao1){
-                    Toast.makeText(MainActivity.this, "Aperto no 1", Toast.LENGTH_SHORT).show();
+                    respostaEscolhida = 1;
                 }
                 if (checkedId == R.id.opcao2){
-                    Toast.makeText(MainActivity.this, "Aperto no 2", Toast.LENGTH_SHORT).show();
+                    respostaEscolhida = 2;
                 }
                 if (checkedId == R.id.opcao3){
-                    Toast.makeText(MainActivity.this, "Aperto no 3", Toast.LENGTH_SHORT).show();
+                    respostaEscolhida = 3;
                 }
 
                 confirmar.setEnabled(true);
@@ -178,7 +185,41 @@ public class MainActivity extends AppCompatActivity {
     private void clicaProxima() {
 
         rodada++;
+
+        if (rodada >= listaQuestoes.size()){
+            fimDeJogo();
+        }else{
         atualizaView();
+        }
+
+    }
+
+    private void fimDeJogo() {
+
+        progresso.setVisibility(View.GONE);
+        confirmar.setEnabled(false);
+
+        final AlertDialog.Builder alerta;
+        alerta = new AlertDialog.Builder(MainActivity.this);
+        alerta.setTitle("Fim de Jogo");
+        alerta.setMessage("Você marcou " + respostasCertas + " pontos");
+        alerta.setIcon(R.mipmap.ic_ajuda);
+        alerta.setCancelable(false);
+
+        alerta.setPositiveButton("Jogar Novamente", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                rodada = 0;
+                respostasCertas = 0;
+                atualizaView();
+
+            }
+        });
+        alerta.create();
+        alerta.show();
+
+        clicaProxima();
 
     }
 
