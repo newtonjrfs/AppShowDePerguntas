@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     Button confirmar;
     ProgressBar progresso;
 
+    int rodada = 0 ;
+
     ArrayList<Questao> listaQuestoes;
 
     String txtTexto;
@@ -55,6 +58,17 @@ public class MainActivity extends AppCompatActivity {
 
         listaQuestoes = new ArrayList<Questao>();
 
+        confirmar.setEnabled(false);
+
+        confirmar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                clicaProxima();
+
+            }
+        });
+
 
         grupoResposta.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -68,12 +82,17 @@ public class MainActivity extends AppCompatActivity {
                 if (checkedId == R.id.opcao3){
                     Toast.makeText(MainActivity.this, "Aperto no 3", Toast.LENGTH_SHORT).show();
                 }
+
+                confirmar.setEnabled(true);
+
             }
         });
 
         new JsonTask().execute(url);
 
     }
+
+
 
     private class JsonTask extends AsyncTask<String, String, String> {
 
@@ -156,13 +175,21 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+    private void clicaProxima() {
+
+        rodada++;
+        atualizaView();
+
+    }
 
     void atualizaView(){
-
-            perguntas.setText(listaQuestoes.get(0).pergunta);
-            respA.setText(listaQuestoes.get(0).respostaA);
-            respB.setText(listaQuestoes.get(0).respostaB);
-            respC.setText(listaQuestoes.get(0).respostaC);
+            progresso.setVisibility(View.GONE);
+            grupoResposta.clearCheck();
+            perguntas.setText(listaQuestoes.get(rodada).pergunta);
+            respA.setText(listaQuestoes.get(rodada).respostaA);
+            respB.setText(listaQuestoes.get(rodada).respostaB);
+            respC.setText(listaQuestoes.get(rodada).respostaC);
+            confirmar.setEnabled(false);
 
     }
 
