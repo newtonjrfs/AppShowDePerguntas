@@ -65,18 +65,6 @@ public class MainActivity extends AppCompatActivity {
 
         confirmar.setEnabled(false);
 
-        confirmar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (respostaEscolhida == listaQuestoes.get(rodada).correta){
-                    respostasCertas ++;
-                }
-                clicaProxima();
-
-            }
-        });
-
-
         grupoResposta.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -95,7 +83,78 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        confirmar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (respostaEscolhida == listaQuestoes.get(rodada).correta){
+                    int a = listaQuestoes.get(rodada).correta;
+                    respostasCertas ++;
+                }
+                clicaProxima();
+
+            }
+        });
+
         new JsonTask().execute(url);
+
+    }
+    private void clicaProxima() {
+
+
+
+        rodada++;
+
+        if (rodada >= listaQuestoes.size()){
+            fimDeJogo();
+
+        }else{
+            atualizaView();
+
+        }
+
+    }
+
+    private void fimDeJogo() {
+
+        progresso.setVisibility(View.GONE);
+        confirmar.setEnabled(false);
+        criaAlerta();
+
+
+    }
+
+    private void criaAlerta() {
+        AlertDialog.Builder alerta;
+        alerta = new AlertDialog.Builder(MainActivity.this);
+        alerta.setTitle("Fim de Jogo");
+        alerta.setMessage("Você marcou " + respostasCertas + " pontos");
+        alerta.setIcon(R.mipmap.ic_ajuda);
+        alerta.setCancelable(false);
+
+        alerta.setPositiveButton("Jogar Novamente", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                rodada = 0;
+                respostasCertas = 0;
+                atualizaView();
+
+            }
+        });
+        alerta.create();
+        alerta.show();
+    }
+
+    void atualizaView(){
+
+        progresso.setVisibility(View.GONE);
+        grupoResposta.clearCheck();
+        perguntas.setText(listaQuestoes.get(rodada).pergunta);
+        respA.setText(listaQuestoes.get(rodada).respostaA);
+        respB.setText(listaQuestoes.get(rodada).respostaB);
+        respC.setText(listaQuestoes.get(rodada).respostaC);
+        confirmar.setEnabled(false);
 
     }
 
@@ -182,113 +241,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-    private void clicaProxima() {
 
-        rodada++;
 
-        if (rodada >= listaQuestoes.size()){
-            fimDeJogo();
-        }else{
-        atualizaView();
-        }
-
-    }
-
-    private void fimDeJogo() {
-
-        progresso.setVisibility(View.GONE);
-        confirmar.setEnabled(false);
-
-        final AlertDialog.Builder alerta;
-        alerta = new AlertDialog.Builder(MainActivity.this);
-        alerta.setTitle("Fim de Jogo");
-        alerta.setMessage("Você marcou " + respostasCertas + " pontos");
-        alerta.setIcon(R.mipmap.ic_ajuda);
-        alerta.setCancelable(false);
-
-        alerta.setPositiveButton("Jogar Novamente", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                rodada = 0;
-                respostasCertas = 0;
-                atualizaView();
-
-            }
-        });
-        alerta.create();
-        alerta.show();
-
-        clicaProxima();
-
-    }
-
-    void atualizaView(){
-            progresso.setVisibility(View.GONE);
-            grupoResposta.clearCheck();
-            perguntas.setText(listaQuestoes.get(rodada).pergunta);
-            respA.setText(listaQuestoes.get(rodada).respostaA);
-            respB.setText(listaQuestoes.get(rodada).respostaB);
-            respC.setText(listaQuestoes.get(rodada).respostaC);
-            confirmar.setEnabled(false);
-
-    }
-
-}
-
-class Questao{
-
-    String pergunta ;
-    String respostaA;
-    String respostaB;
-    String respostaC;
-    int correta;
-
-    public Questao(String pergunta, String respostaA, String respostaB, String respostaC, int correta) {
-        this.pergunta = pergunta;
-        this.respostaA = respostaA;
-        this.respostaB = respostaB;
-        this.respostaC = respostaC;
-        this.correta = correta;
-    }
-
-    public String getPergunta() {
-        return pergunta;
-    }
-
-    public void setPergunta(String pergunta) {
-        this.pergunta = pergunta;
-    }
-
-    public String getRespostaA() {
-        return respostaA;
-    }
-
-    public void setRespostaA(String respostaA) {
-        this.respostaA = respostaA;
-    }
-
-    public String getRespostaB() {
-        return respostaB;
-    }
-
-    public void setRespostaB(String respostaB) {
-        this.respostaB = respostaB;
-    }
-
-    public String getRespostaC() {
-        return respostaC;
-    }
-
-    public void setRespostaC(String respostaC) {
-        this.respostaC = respostaC;
-    }
-
-    public int getCorreta() {
-        return correta;
-    }
-
-    public void setCorreta(int correta) {
-        this.correta = correta;
-    }
 }
